@@ -4,7 +4,10 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
     config = require('./config/config.js'),
-    ConnectMongo = require('connect-mongo')(session);
+    ConnectMongo = require('connect-mongo')(session),
+    mongoose = require('mongoose').connect(config.dbURL),
+    passport = require('passport'),
+    FacebookStrategy = require('passport-facebook').Strategy
 
 
 app.set('views', path.join(__dirname, 'views')); //use path to set the views folder
@@ -15,10 +18,11 @@ app.use(cookieParser());
 
 var env = process.env.NODE_ENV || 'development'; //in console: export NODE_ENV=production (OSX, linux) or set NODE_ENV=production (win)
 if(env === 'development'){ 
+    
+app.use(session({
     //dev specific settings
     //app.use(session({secret:config.sessionSecret, saveUninitialized:true, resave:true}));   //ver above 1.2.0 default settings depricated. 
                                                 //must also set , saveUninitialized=true, resave=true
-app.use(session({
         secret:config.sessionSecret,
         store: new ConnectMongo({
             url:config.dbURL,
@@ -43,8 +47,30 @@ app.use(session({
                                                 // memory, and will not scale past a single process.
                                                 //Use DB or Redis
 }
-require('./routes/routes.js')(express, app);
 
+//Test mongoos database 
+// var userSchema = mongoose.Schema({
+//     username:String,
+//     password:String,
+//     fullname:String
+// })
+// var Person = mongoose.model('users', userSchema);
+// var Jhon = new Person({
+//     username:'Jhon Doe',
+//     password:'test123',
+//     fullname:'Jhon Sven Doe'
+// })
+// Jhon.save(function(err){
+//     console.log('Saved Data');
+// })
+
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./auth/passportAuth.js')(passport, FacebookStrategy, config, mongoose);
+require('./routes/routes.js')(express, app, passport);
 //app.route('/').get(function(req, res, next){
     //res.send('<h1>helo world</h1>');
     //res.render('index', {title: 'Welcome to MjaoChat!'});

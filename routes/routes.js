@@ -1,4 +1,4 @@
-module.exports = function(express, app){
+module.exports = function(express, app, passport){
     var router = express.Router();
 
     // index.html
@@ -8,7 +8,7 @@ module.exports = function(express, app){
 
     // chatrooms.html
     router.get('/chatrooms', function(req, res, next){
-        res.render('chatrooms', {title: 'Chatrooms'});
+        res.render('chatrooms', {title: 'Chatrooms', user:req.user});
     })
 
     //set session demo
@@ -21,6 +21,12 @@ module.exports = function(express, app){
         res.send('Your fav color: ' + (req.session.favColor===undefined?'not found':req.session.favColor))
     })
 
+    router.get('/auth/facebook', passport.authenticate('facebook'));
     
+    router.get('/auth/facebook/callback', passport.authenticate('facebook', {
+        successRedirect: '/chatrooms',
+        failureRedirect: '/'
+    }))
+
     app.use('/', router);
 }
