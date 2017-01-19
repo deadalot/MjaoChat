@@ -1,4 +1,4 @@
 {
-    "dbURL" : "localhost:8000",
+    "dbURL" : "mongodb://localhost:27017/dead_db",
     "sessionSecret":"somethingrandom"
 }

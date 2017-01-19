@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "connect-mongo": "^1.3.2",
     "cookie-parser": "^1.1.0",
-    "dyngodb2": "^0.1.30",
     "express": "^4.2.0",
     "express-session": "^1.2.0",
     "hogan-express": "^0.5.2"

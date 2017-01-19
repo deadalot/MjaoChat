@@ -1,4 +1,4 @@
 {
-    "dbURL" : "localhost:8000",
+    "dbURL" : "mongodb://mjaochat:hejhej1@ds117859.mlab.com:17859/dead_db",
     "sessionSecret":"somethingrandom"
 }
