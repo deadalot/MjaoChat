@@ -3,7 +3,7 @@ var express = require('express'),
     path = require('path'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
-    config = require('./config/config.js'),
+    config = require('./config/config.js'),    
     ConnectMongo = require('connect-mongo')(session),
     mongoose = require('mongoose').connect(config.dbURL),
     passport = require('passport'),
@@ -17,12 +17,9 @@ app.use(express.static(path.join(__dirname, 'public'))); //./public static files
 app.use(cookieParser());
 
 var env = process.env.NODE_ENV || 'development'; //in console: export NODE_ENV=production (OSX, linux) or set NODE_ENV=production (win)
-if(env === 'development'){ 
-    
-app.use(session({
+if(env === 'development'){     
     //dev specific settings
-    //app.use(session({secret:config.sessionSecret, saveUninitialized:true, resave:true}));   //ver above 1.2.0 default settings depricated. 
-                                                //must also set , saveUninitialized=true, resave=true
+    app.use(session({    
         secret:config.sessionSecret,
         store: new ConnectMongo({
             url:config.dbURL,
