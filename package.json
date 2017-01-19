@@ -1,0 +1,18 @@
+{
+  "name": "mjaochat",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.1.0",
+    "dyngodb2": "^0.1.30",
+    "express": "^4.2.0",
+    "express-session": "^1.2.0",
+    "hogan-express": "^0.5.2"
+  }
+}
