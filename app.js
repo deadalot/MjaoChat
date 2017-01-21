@@ -7,7 +7,8 @@ var express = require('express'),
     ConnectMongo = require('connect-mongo')(session),
     mongoose = require('mongoose').connect(config.dbURL),
     passport = require('passport'),
-    FacebookStrategy = require('passport-facebook').Strategy
+    FacebookStrategy = require('passport-facebook').Strategy,
+    rooms = []
 
 
 app.set('views', path.join(__dirname, 'views')); //use path to set the views folder
@@ -67,14 +68,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./auth/passportAuth.js')(passport, FacebookStrategy, config, mongoose);
-require('./routes/routes.js')(express, app, passport);
+require('./routes/routes.js')(express, app, passport,config);
 //app.route('/').get(function(req, res, next){
     //res.send('<h1>helo world</h1>');
     //res.render('index', {title: 'Welcome to MjaoChat!'});
 //})
 
-app.listen(8081, function(){
-    console.log('MjaoChat running on Port 8081');
-    console.log('Mode: ' + env); 
+//app.listen(8081, function(){
+//    console.log('MjaoChat running on Port 8081');
+//    console.log('Mode: ' + env); 
+//})
+app.set('port', process.env.PORT || 8081); //Use socket.io with express 
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+require('./socket/socket.js')(io, rooms);
+server.listen(app.get('port'), function(){
+    console.log('MjaoChat on Port: ' + app.get('port'));
 })
+
 

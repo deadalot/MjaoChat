@@ -4,6 +4,37 @@
     <meta charset="UTF-8">
     <title>{{title}}</title>
     <link rel="stylesheet" href="../css/chatroom.css">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    $(function(){
+        var host = '{{config.host}}'
+        var socket = io.connect(host + '/roomlist');
+        
+        socket.on('connect', function(){
+            console.log('Connection established');
+        })
+
+        socket.on('roomupdate', function(data){
+            var procData = JSON.parse(data);
+            $('.roomlist').html('');
+            for(var i = 0; i< procDate.length; i++){
+                var str = '<a href="room/' + procData[i].room_number + '"><li>' + procData[i].room_name + '</li></a>';
+                $('.roomlist').prepend(str);
+            }
+        })
+
+        $(document).on('click', '#create', function(){
+            var room_name = $('.newroom').val();
+            if(room_name!= ''){
+                var room_number = parseInt(Math.random() * 10000);
+                socket.emit('newroom', {room_name:room_name, room_number:room_number});
+                $('.newroom').val('');
+            }
+        })
+        
+    });
+    </script>
 </head>
 <body>
     <div class="cr-container">
@@ -17,10 +48,7 @@
             <button id="create">Create Room</button>
         </div>
         <div class="cr-roomlist">
-            <ul class="roomlist">
-                <a href="#"><li>NodeJS</li></a>
-                <a href="#"><li>AWS</li></a>
-                <a href="#"><li>DynamoDB</li></a>
+            <ul class="roomlist">                
             </ul>
         </div>
     </div>

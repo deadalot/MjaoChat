@@ -4,6 +4,7 @@
     "fb":{
         "appID":"1736531253343223",
         "appSecret":"8e65ede94992dfb92c37893ced66bd64",
-        "callbackURL":"http://80.217.86.25:8081/auth/facebook/callback"
-        }
+        "callbackURL":"http://localhost:8081/auth/facebook/callback"
+        },
+    "host":""
 }
